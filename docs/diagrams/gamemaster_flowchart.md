@@ -28,24 +28,56 @@ flowchart TD
     CRY -.->|cut list kept, not passed on| GM
 
     SCOPE -->|only this reaches the planner| PLAN[Planner: propose 2-3 candidate plans]
-    PLAN <-->|delegates system design, gets docs/systems specs| WORLDCHAT
+    PLAN <-->|delegates system design, gets docs/systems specs| WORLDL
     PLAN --> SEL[Select best plan, weight extras, split by lane]
 
     SEL --> IMP[Implementer: hub in every lane chat, owns shared asset spec]
-    IMP <-->|TASK out, DONE and QUESTION back| CHATS
+    IMP <-->|TASK out, DONE and QUESTION back| CODEL
+    IMP <--> ARTL
+    IMP <--> WORLDL
+    IMP <--> AUDL
+    IMP <--> UIL
+    IMP <--> QAL
 
     IMP -->|small parallel coding jobs via delegate_task| KIDS[Coder children: coder profile route, up to max_concurrent_children]
     KIDS -->|results as final answers| IMP
 
-    subgraph CHATS["Lane group chats: bots talk inside a lane, cross-lane goes through the Implementer"]
-        direction LR
-        CODECHAT["code-lane chat: coder instances, gameplay-mechanics"]
-        ARTCHAT["art-lane chat: texture, model, animator, vfx, shader"]
-        WORLDCHAT["world-lane chat: world-designer, crafting-manager, tech-system-expert, magic-system-expert, gameplay-mechanics"]
-        AUDCHAT["audio-lane chat: sfx-designer, music-composer"]
-        UICHAT["ui-lane chat: ui-ux-designer"]
-        QACHAT["quality-lane chat: integrator, test-auditor, reviewer"]
+    subgraph CODEL["code-lane chat"]
+        CODER["coder (many instances)"]
+        MECH["gameplay-mechanics"]
     end
+
+    subgraph ARTL["art-lane chat"]
+        TEX["texture-artist"]
+        MOD["model-artist"]
+        ANIM["animator"]
+        VFXA["vfx-artist"]
+        SHD["shader-artist"]
+    end
+
+    subgraph WORLDL["world-lane chat"]
+        WDES["world-designer"]
+        CRAFT["crafting-manager"]
+        TECH["tech-system-expert"]
+        MAGIC["magic-system-expert"]
+    end
+
+    subgraph AUDL["audio-lane chat"]
+        SFX["sfx-designer"]
+        MUS["music-composer"]
+    end
+
+    subgraph UIL["ui-lane chat"]
+        UIX["ui-ux-designer"]
+    end
+
+    subgraph QAL["quality-lane chat"]
+        INTEG["integrator"]
+        TESTA["test-auditor"]
+    end
+
+    MECH -.->|also a member| WORLDL
+    REV -.->|also a member, final gate| QAL
 
     IMP --> MERGE[Merge outputs into one build]
 
@@ -64,7 +96,8 @@ flowchart TD
 
 ## Notes
 
-- A lane is a group chat. Bots in a lane talk to each other there; each bot keeps its own tools.
+- A lane is a group chat. Each bot in a lane is shown as its own node. Bots in a lane talk to each other there; each bot keeps its own tools.
+- The Implementer is a member of every lane chat, shown as one edge per lane. gameplay-mechanics also sits in the world-lane chat, and the Reviewer also sits in the quality-lane chat; both are shown with dotted edges.
 - Cross-lane questions are posted to the Implementer in the asker's own lane chat. The Implementer relays them and logs the relay.
 - The Planner delegates design of the technology system, magic system, crafting, and world generation to the experts in #world-lane. It still reads only the crystallizer's final scope from upstream.
 - Integration and Test/Auditor work on outputs routed to them by the Implementer in #quality-lane. The Reviewer stays the single final gate.
