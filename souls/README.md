@@ -14,7 +14,7 @@ Project: a voxel sandbox game in the Minecraft style with a built-in technology 
 
 ## Flow
 
-dream, crystallize, plan (planner consults #world-lane experts), implement (implementer dispatches to lanes), review, polish. A misaligned review restarts at crystallize. The planner reads only `docs/scope.md`.
+dream, crystallize, plan (planner consults #world-lane experts and writes a task list for every coder, designer, and other bot), implement (implementer dispatches those task lists to the lanes), review, polish. A misaligned review restarts at crystallize. The planner reads only `docs/scope.md`.
 
 ## Lane chats
 

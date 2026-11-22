@@ -30,7 +30,7 @@ Gamemaster (persistent, user's single point of contact, in #phase-room)
 │   │   ├── magic-system-expert (power source, spells, rituals, progression)
 │   │   ├── crafting-manager (recipes, registry, progression gates)
 │   │   └── world-designer (terrain, biomes, resources, structures)
-│   └── Split tasks by lane
+│   └── Write task lists for every coder, designer, and other bot (docs/tasks/<bot>.md)
 │
 ├── 4. IMPLEMENT: implementer (hub in every lane chat, owns the shared asset spec)
 │   ├── Delegate children: coder profile route, small parallel coding jobs
@@ -88,6 +88,7 @@ mindmap
         2-3 candidate plans
         select one
         weight extras
+        task lists for every bot
         delegates to world-lane experts
           tech-system-expert
           magic-system-expert

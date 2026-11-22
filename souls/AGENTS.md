@@ -53,6 +53,7 @@ game/
     dream/cut_list.md            crystallizer (never read by the planner)
     scope.md                     crystallizer (the only upstream input the planner reads)
     plan.md, stack.md            planner
+    tasks/index.md, tasks/<bot>.md   planner (one task list per bot)
     modules.md, relay_log.md     implementer
     api/*.md                     engine-coder (core interfaces the other coders build against)
     systems/tech.md              tech-system-expert
@@ -99,6 +100,8 @@ The implementer writes `spec/asset_spec.md` before dispatching any asset or code
 - Put everything a child needs in its context: file paths, interfaces, spec excerpts, acceptance checks.
 
 ## Code build waves
+
+Every wave's tasks come from the planner's task lists in `docs/tasks/`.
 
 - Wave 0: the implementer writes module boundaries in `docs/modules.md`. engine-coder publishes the project skeleton and interface stubs in `docs/api/` and posts DONE.
 - Wave 1: all other specialist coders and the generic coders work in parallel against those stubs. Specialist coders are standing bots. Generic coders can also run as `delegate_task` children for small units.

@@ -29,9 +29,9 @@ flowchart TD
 
     SCOPE -->|only this reaches the planner| PLAN[Planner: propose 2-3 candidate plans]
     PLAN <-->|delegates system design, gets docs/systems specs| WORLDL
-    PLAN --> SEL[Select best plan, weight extras, split by lane]
+    PLAN --> SEL[Select best plan, weight extras, write a task list for every coder, designer, and other bot]
 
-    SEL --> IMP[Implementer: hub in every lane chat, owns shared asset spec]
+    SEL -->|docs/tasks per bot| IMP[Implementer: hub in every lane chat, owns shared asset spec, dispatches the planner's task lists]
     IMP <-->|TASK out, DONE and QUESTION back| CODEL
     IMP <--> ARTL
     IMP <--> WORLDL
