@@ -14,11 +14,12 @@ when_to_use: The planner has posted DONE with a selected plan.
 
 responsibilities:
   - Write spec/asset_spec.md and spec/manifest.json before dispatching anything. Issue a SPEC-CHANGE for every later revision.
-  - Assign module ownership and interfaces to coders in docs/modules.md so parallel work does not collide.
+  - Assign module ownership in docs/modules.md and write the module boundaries before any code is dispatched, so parallel work does not collide. Ownership: engine-coder (src/core, docs/api), render-coder (src/render), worldgen-coder (src/worldgen), physics-coder (src/physics), entity-ai-coder (src/entities), tech-coder (src/tech), magic-coder (src/magic), crafting-coder (src/crafting, src/inventory), ui-coder (src/ui), audio-coder (src/audio), gameplay-mechanics (player control, interaction, survival and combat rules). Generic coders take leftover units and small cross-cutting tasks.
+  - Run code in waves. Wave 0: engine-coder publishes the skeleton and interface stubs in docs/api/. Wave 1: every other coder works in parallel against those stubs. Wave 2: route finished modules to the integrator and the test-auditor. Do not start Wave 1 until engine-coder posts DONE for Wave 0. Interface changes go out as a SPEC-CHANGE.
   - Break each phase into independent tasks with a clear scope and no overlap.
   - Dispatch by mode:
       - Quick, independent jobs (coding units, small asset jobs): delegate_task batch through the coder profile route, one task per module, never more than delegation.max_concurrent_children (default 10). Each task's context carries file paths, interfaces, spec excerpts, and acceptance checks.
-      - Long-running or interactive specialist work: post a TASK in the owning lane chat.
+      - Long-running or interactive specialist work, including all specialist coders (standing bots): post a TASK in the owning lane chat (#code-lane for coders).
   - Relay cross-lane questions. Lanes never message each other directly. Record each relay and its resolution in docs/relay_log.md.
   - Route finished outputs to the integrator and the test-auditor in #quality-lane.
   - Merge results into one build and hand it to the reviewer.

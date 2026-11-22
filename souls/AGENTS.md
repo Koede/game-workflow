@@ -20,11 +20,11 @@ Originality rule: every asset, name, text, sound, and line of code is original. 
 | Chat | Members |
 |---|---|
 | #phase-room | gamemaster, dreamer, crystallizer, planner, implementer, reviewer, polisher |
-| #code-lane | implementer, coder (many instances), gameplay-mechanics |
-| #art-lane | implementer, texture-artist, model-artist, animator, vfx-artist, shader-artist |
-| #world-lane | implementer, planner, world-designer, crafting-manager, tech-system-expert, magic-system-expert, gameplay-mechanics |
-| #audio-lane | implementer, sfx-designer, music-composer |
-| #ui-lane | implementer, ui-ux-designer |
+| #code-lane | implementer, coder (many instances), gameplay-mechanics, engine-coder, physics-coder, entity-ai-coder, render-coder, worldgen-coder, tech-coder, magic-coder, crafting-coder, ui-coder, audio-coder |
+| #art-lane | implementer, texture-artist, model-artist, animator, vfx-artist, shader-artist, render-coder |
+| #world-lane | implementer, planner, world-designer, crafting-manager, tech-system-expert, magic-system-expert, gameplay-mechanics, worldgen-coder, tech-coder, magic-coder, crafting-coder |
+| #audio-lane | implementer, sfx-designer, music-composer, audio-coder |
+| #ui-lane | implementer, ui-ux-designer, ui-coder |
 | #quality-lane | implementer, integrator, test-auditor, reviewer |
 
 ## Chat protocol
@@ -35,9 +35,11 @@ Start every message with a tag.
 - `DONE <id>`: finished, with output paths and a two-line summary.
 - `BLOCKED <id>`: cannot proceed, with the reason and what is needed.
 - `QUESTION <id> -> <bot>`: a question. Within your lane, address the bot directly.
-- `SPEC-CHANGE`: implementer only. States what changed in `spec/asset_spec.md` and who is affected.
+- `SPEC-CHANGE`: implementer only. States what changed in `spec/asset_spec.md` or in an interface under `docs/api/`, and who is affected.
 
 Cross-lane rule: do not message bots in another lane. Post `QUESTION -> implementer` in your own lane chat. The implementer relays it into the other lane's chat and records it in `docs/relay_log.md`.
+
+Exception for coders that implement another lane's spec: tech-coder, magic-coder, crafting-coder, and worldgen-coder also sit in #world-lane; render-coder also sits in #art-lane; ui-coder also sits in #ui-lane; audio-coder also sits in #audio-lane. Talk to the author of the spec you implement directly in that author's lane chat. Anything that changes an interface or the asset spec still goes through the implementer.
 
 ## Workspace layout (proposed)
 
@@ -52,6 +54,7 @@ game/
     scope.md                     crystallizer (the only upstream input the planner reads)
     plan.md, stack.md            planner
     modules.md, relay_log.md     implementer
+    api/*.md                     engine-coder (core interfaces the other coders build against)
     systems/tech.md              tech-system-expert
     systems/magic.md             magic-system-expert
     systems/crafting.md          crafting-manager
@@ -61,7 +64,18 @@ game/
   assets/
     textures/ models/ animations/ vfx/ shaders/ sfx/ music/ ui/
   data/recipes/                  crafting-manager
-  src/                           coders and gameplay-mechanics (module owners in docs/modules.md)
+  src/
+    core/                        engine-coder
+    render/                      render-coder
+    worldgen/                    worldgen-coder
+    physics/                     physics-coder
+    entities/                    entity-ai-coder
+    tech/                        tech-coder
+    magic/                       magic-coder
+    crafting/, inventory/        crafting-coder
+    ui/                          ui-coder
+    audio/                       audio-coder
+    other modules                gameplay-mechanics and generic coders, per docs/modules.md
   tests/                         test-auditor
   reports/
     review/ audit/ polish/ build/
@@ -83,6 +97,13 @@ The implementer writes `spec/asset_spec.md` before dispatching any asset or code
 - A `delegate_task` batch larger than `delegation.max_concurrent_children` (default 10) returns an error instead of being truncated. Split larger fanouts into successive batches.
 - Children inherit the parent's enabled toolsets and cannot widen them. Leaf children cannot delegate.
 - Put everything a child needs in its context: file paths, interfaces, spec excerpts, acceptance checks.
+
+## Code build waves
+
+- Wave 0: the implementer writes module boundaries in `docs/modules.md`. engine-coder publishes the project skeleton and interface stubs in `docs/api/` and posts DONE.
+- Wave 1: all other specialist coders and the generic coders work in parallel against those stubs. Specialist coders are standing bots. Generic coders can also run as `delegate_task` children for small units.
+- Wave 2: finished modules go to the integrator and the test-auditor in #quality-lane.
+- Interfaces in `docs/api/` change only through a `SPEC-CHANGE` from the implementer.
 
 ## Reporting
 

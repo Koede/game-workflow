@@ -35,11 +35,13 @@ Gamemaster (persistent, user's single point of contact, in #phase-room)
 ├── 4. IMPLEMENT: implementer (hub in every lane chat, owns the shared asset spec)
 │   ├── Delegate children: coder profile route, small parallel coding jobs
 │   └── Lane group chats (bots talk inside a lane; cross-lane goes through implementer)
-│       ├── #code-lane: coder instances, gameplay-mechanics
-│       ├── #art-lane: texture-artist, model-artist, animator, vfx-artist, shader-artist
-│       ├── #world-lane: world-designer, crafting-manager, tech-system-expert, magic-system-expert, gameplay-mechanics
-│       ├── #audio-lane: sfx-designer, music-composer
-│       ├── #ui-lane: ui-ux-designer
+│       ├── #code-lane
+│       │   ├── Wave 0: engine-coder (publishes core interfaces first)
+│       │   └── Wave 1 (parallel): coder workhorses, gameplay-mechanics, render-coder, worldgen-coder, physics-coder, entity-ai-coder, tech-coder, magic-coder, crafting-coder, ui-coder, audio-coder
+│       ├── #art-lane: texture-artist, model-artist, animator, vfx-artist, shader-artist, render-coder (also in code-lane)
+│       ├── #world-lane: world-designer, crafting-manager, tech-system-expert, magic-system-expert, gameplay-mechanics, worldgen-coder, tech-coder, magic-coder, crafting-coder (coders also in code-lane)
+│       ├── #audio-lane: sfx-designer, music-composer, audio-coder (also in code-lane)
+│       ├── #ui-lane: ui-ux-designer, ui-coder (also in code-lane)
 │       └── #quality-lane: integrator, test-auditor, reviewer
 │   Output: merged build
 │
@@ -97,24 +99,43 @@ mindmap
         coder children via delegate_task
         Lane chats
           code-lane
-            coder instances
-            gameplay-mechanics
+            Wave 0
+              engine-coder
+            Wave 1 parallel
+              coder workhorses
+              gameplay-mechanics
+              render-coder
+              worldgen-coder
+              physics-coder
+              entity-ai-coder
+              tech-coder
+              magic-coder
+              crafting-coder
+              ui-coder
+              audio-coder
           art-lane
             texture-artist
             model-artist
             animator
             vfx-artist
             shader-artist
+            render-coder
           world-lane
             world-designer
             crafting-manager
             tech-system-expert
             magic-system-expert
+            worldgen-coder
+            tech-coder
+            magic-coder
+            crafting-coder
           audio-lane
             sfx-designer
             music-composer
+            audio-coder
           ui-lane
             ui-ux-designer
+            ui-coder
           quality-lane
             integrator
             test-auditor
